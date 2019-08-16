@@ -22,7 +22,7 @@ local game = require "states.game"
 
 function love.load()
     love.graphics.setDefaultFilter("nearest","nearest")
-    love.window.setTitle("Tetris")
+    love.window.setTitle("Brickmania")
     Gamestate.registerEvents()
     Gamestate.switch(game,"game")
 end
