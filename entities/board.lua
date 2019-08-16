@@ -128,7 +128,9 @@ function Board:update(dt)
 end
 
 function Board:removeCompleteRows()
-	for i=self.height,1,-1 do
+	local i = self.height
+	repeat
+	
 
 	  -- count the number of filled pieces in this row
 	  local filledPieces = 0
@@ -142,10 +144,13 @@ function Board:removeCompleteRows()
       if(filledPieces == self.width) then
       	for k=i,2,-1 do
   			for l=1,self.width do
-	    		self.matrix[k][l] = self.matrix[k-1][l]
-        	end
-      	end
-      end
-	end
+				self.matrix[k][l] = self.matrix[k-1][l]
+			end
+		  end
+		else
+			i = i - 1
+	   end
+	  
+	until i == 0
 end
 
