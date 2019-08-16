@@ -9,11 +9,15 @@
 require "entities.board"
 require "entities.piece"
 require "entities.PieceGenerator"
-
+Camera = require "hump.camera"
 
 local game = {}
 
 function game:enter()
+
+    --camera = Camera(love.graphics.getWidth()/2, love.graphics.getHeight()/2)
+    camera = Camera(1024/2, 768/2)
+    camera.scale = love.graphics.getHeight()/768
 
     game.input = baton.new {
             controls = {
@@ -45,11 +49,11 @@ end
 
 
 function game:draw()
-    --camera:attach()
+    camera:attach()
     
     board:draw()
     piece:draw()
-    --camera:detach()
+    camera:detach()
 
 end
 
