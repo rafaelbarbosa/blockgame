@@ -9,16 +9,15 @@
 require "entities.board"
 require "entities.piece"
 require "entities.PieceGenerator"
+require "entities.piecedrawer"
 Camera = require "hump.camera"
 
 local game = {}
 
 function game:enter()
-
-    --camera = Camera(love.graphics.getWidth()/2, love.graphics.getHeight()/2)
     camera = Camera(1024/2, 768/2)
     camera.scale = love.graphics.getHeight()/768
-
+    self.score=0
     game.input = baton.new {
             controls = {
                 rotateLeft = {'key:z'},
@@ -28,6 +27,7 @@ function game:enter()
                 up = {'key:up', 'key:w', 'axis:lefty-', 'button:dpup'},
                 down = {'key:down', 'key:s', 'axis:lefty+', 'button:dpdown'},
                 action = {'key:space', 'button:a'},
+                exit = {'key:escape'},
             },
             pairs = {
                 move = {'left', 'right', 'up', 'down'}
@@ -35,15 +35,12 @@ function game:enter()
             joystick = love.joystick.getJoysticks()[1],
         }
 
-	board = Board(10,24)
-    pieceGenerator = PieceGenerator()
-    piece = pieceGenerator:generate()
+    board = Board(10,24)
+    pieceDrawer = PieceDrawer()
+    
+    piece = pieceDrawer:getNextPiece()
     game.cooldown = 0.2
     game.timer = 0
-
-    --camera = Camera(0, 0,1)
-    --camera.smoother = Camera.smooth.damped(10)
-    --love.graphics.setBackgroundColor( 1,1,1 )
 
 end
 
@@ -53,6 +50,7 @@ function game:draw()
     
     board:draw()
     piece:draw()
+    pieceDrawer:draw()
     camera:detach()
 
 end
@@ -99,9 +97,8 @@ function game:update(dt)
    
     if board:canPieceMoveDown(piece) == false then
         board:addPieceToBoard(piece)
-        board:removeCompleteRows()
-        piece = pieceGenerator:generate()
-
+        self.score = self.score + board:removeCompleteRows() * 10000
+        piece = pieceDrawer:getNextPiece()
     end
     board:update(dt)
     

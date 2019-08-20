@@ -129,6 +129,7 @@ end
 
 function Board:removeCompleteRows()
 	local i = self.height
+	local numberOfLinesCleared = 0
 	repeat
 	
 
@@ -147,10 +148,12 @@ function Board:removeCompleteRows()
 				self.matrix[k][l] = self.matrix[k-1][l]
 			end
 		  end
+		  numberOfLinesCleared = numberOfLinesCleared + 1
 		else
 			i = i - 1
 	   end
 	  
 	until i == 0
+	return numberOfLinesCleared
 end
 
