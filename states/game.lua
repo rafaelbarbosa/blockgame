@@ -10,6 +10,7 @@ require "entities.board"
 require "entities.piece"
 require "entities.PieceGenerator"
 require "entities.piecedrawer"
+require "entities.scoreboard"
 Camera = require "hump.camera"
 
 local game = {}
@@ -44,6 +45,7 @@ function game:enter()
     ghostPiece.ghost=true
     game.cooldown = 0.2
     game.timer = 0
+    game.scoreboard = Scoreboard(11*32,23*32)
 
 end
 
@@ -55,6 +57,7 @@ function game:draw()
     piece:draw()
     pieceDrawer:draw()
     ghostPiece:draw()
+    self.scoreboard:draw()
     camera:detach()
 
 end
@@ -112,6 +115,7 @@ function game:update(dt)
     if board:canPieceMoveDown(piece) == false then
         board:addPieceToBoard(piece)
         self.score = self.score + board:removeCompleteRows() * 10000
+        self.scoreboard:updateScore(self.score)
         piece = pieceDrawer:getNextPiece()
         ghostPiece = piece:clone()
         ghostPiece.ghost=true
