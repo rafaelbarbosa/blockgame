@@ -7,13 +7,14 @@
 --
 
 Piece = Class{
-    init = function(self,matrix,width, height,color, x,y)
+	init = function(self,matrix,width, height,color, x,y,ghost)
 	    self.matrix = matrix
 	    self.color = color
 	    self.width = width
 	    self.height = height
 	    self.x = x
-	    self.y = y
+		self.y = y
+		self.ghost = ghost
 	    self.spritesheet = love.graphics.newImage('assets/blocks.png')
 		self.quad = love.graphics.newQuad(0, (color*32)-32, 32, 32, self.spritesheet:getDimensions())    
     end
@@ -23,7 +24,11 @@ Piece = Class{
 
 
 function Piece:draw()
-	love.graphics.setColor( 1, 1, 1, 1 )
+	if(self.ghost) then
+		love.graphics.setColor( 1, 1, 1, 0.5)
+	else
+		love.graphics.setColor( 1, 1, 1, 1 )
+	end
 	for i=1,self.height do
       for j=1,self.width do
       	if(self.matrix[i][j]> 0) then

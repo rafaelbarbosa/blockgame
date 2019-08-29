@@ -9,7 +9,7 @@ PieceGenerator = Class{
 
 function PieceGenerator:generate()
 	local pieceIndex = math.random(7)
-	local color = math.random(5,17)
+	local color = math.random(1,6)
 
 	-- ##
 	--  ##
@@ -20,7 +20,7 @@ function PieceGenerator:generate()
         	{1,1,0},
         	{0,0,0},
     	},
-    	3, 3,color, 32*4,32
+    	3, 3,color, 32*4,32,false
     	)
 	end
 	--  ##
@@ -32,7 +32,7 @@ function PieceGenerator:generate()
         	{0,1,1},
         	{0,0,0},
     	},
-    	3, 3,color, 32*4,32
+    	3, 3,color, 32*4,32,false
     	)
 	end
 
@@ -46,7 +46,7 @@ function PieceGenerator:generate()
         	{1,1,1},
         	{0,0,0},
     	},
-    	3,3,color, 32*4,32
+    	3,3,color, 32*4,32,false
     	)
 	end
 	-- #  
@@ -59,7 +59,7 @@ function PieceGenerator:generate()
         	{1,1,1},
         	{0,0,0},
     	},
-    	3, 3,color, 32*4,32
+    	3, 3,color, 32*4,32,false
     	)
 	end
 
@@ -72,7 +72,7 @@ function PieceGenerator:generate()
         	{1,1,1},
         	{0,0,0},
     	},
-    	3, 3, color, 32*4,32
+    	3, 3, color, 32*4,32,false
     	)
 	end	
 
@@ -84,7 +84,7 @@ function PieceGenerator:generate()
     		{1,1},
     		{1,1},	
     	},
-    	2, 2,color, 32*4,32
+    	2, 2,color, 32*4,32,false
     	)
 	end
 
@@ -97,7 +97,7 @@ function PieceGenerator:generate()
     		{0,0,0,0},
         	{0,0,0,0}
     	},
-    	4, 4,color, 32*4,32
+    	4, 4,color, 32*4,32,false
     	)
 	end
 

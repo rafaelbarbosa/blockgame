@@ -1,7 +1,7 @@
 
 Board = Class{
     init = function(self,width, height)
-    	self.debug = true
+    	self.debug = false
     	self.width = width
     	self.height = height
 	    self.matrix = {}          -- create the matrix
@@ -13,7 +13,7 @@ Board = Class{
 	    end
 	    self.spritesheet = love.graphics.newImage('assets/blocks.png')
 	    self.quads = {}
-	    for i=1,18 do
+	    for i=1,6 do
 	    	self.quads[i] = love.graphics.newQuad(0, (i*32)-32, 32, 32, self.spritesheet:getDimensions())
 	    end
     end
@@ -155,5 +155,15 @@ function Board:removeCompleteRows()
 	  
 	until i == 0
 	return numberOfLinesCleared
+end
+
+function Board:getHeightOfColumn(column)
+	local maxHeight = self.height
+	for i = self.height,1,-1 do
+		if(self.matrix[i][column] > 0) then
+			maxHeight = i -1
+		end
+	end
+	return maxHeight
 end
 
