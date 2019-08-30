@@ -11,6 +11,8 @@ require "entities.piece"
 require "entities.PieceGenerator"
 require "entities.piecedrawer"
 require "entities.scoreboard"
+require "entities.pause"
+
 Camera = require "hump.camera"
 
 local game = {}
@@ -30,6 +32,7 @@ function game:enter()
                 action = {'key:space', 'button:a'},
                 exit = {'key:escape'},
                 debug = {'key:t'},
+                pause = {'key:p'}
             },
             pairs = {
                 move = {'left', 'right', 'up', 'down'}
@@ -46,11 +49,17 @@ function game:enter()
     game.cooldown = 0.2
     game.timer = 0
     game.scoreboard = Scoreboard(11*32,23*32)
+    game.paused = Pause(false, camera.x/2, camera.y/2)
 
 end
 
 
 function game:draw()
+    if game.paused.isPaused then
+        self.paused:draw()
+        return
+    end
+
     camera:attach()
     
     board:draw()
@@ -80,9 +89,10 @@ function game:update(dt)
         self.cooldown = 0.2
     end
 
+    if self.input:pressed 'pause' then
+        game.paused.isPaused = not game.paused.isPaused
+    end
     
-    
-
      if self.input:pressed 'rotateLeft' and self.cooldown < 0 then
         piece:rotateLeft()
         ghostPiece:rotateLeft()
