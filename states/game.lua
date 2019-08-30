@@ -11,9 +11,13 @@ require "entities.piece"
 require "entities.PieceGenerator"
 require "entities.piecedrawer"
 require "entities.scoreboard"
+
 Camera = require "hump.camera"
+Gamestate = require "hump.gamestate"
+
 
 local game = {}
+local pause = require "states.gamepause"
 
 function game:enter()
     camera = Camera(1024/2, 768/2)
@@ -30,6 +34,7 @@ function game:enter()
                 action = {'key:space', 'button:a'},
                 exit = {'key:escape'},
                 debug = {'key:t'},
+                pause = {'key:p'}
             },
             pairs = {
                 move = {'left', 'right', 'up', 'down'}
@@ -46,7 +51,6 @@ function game:enter()
     game.cooldown = 0.2
     game.timer = 0
     game.scoreboard = Scoreboard(11*32,23*32)
-
 end
 
 
@@ -80,9 +84,12 @@ function game:update(dt)
         self.cooldown = 0.2
     end
 
+    if self.input:pressed 'pause' then
+        if Gamestate.current() ~= pause then
+            Gamestate.push(pause)
+        end
+    end
     
-    
-
      if self.input:pressed 'rotateLeft' and self.cooldown < 0 then
         piece:rotateLeft()
         ghostPiece:rotateLeft()
