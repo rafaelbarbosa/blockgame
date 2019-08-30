@@ -11,11 +11,13 @@ require "entities.piece"
 require "entities.PieceGenerator"
 require "entities.piecedrawer"
 require "entities.scoreboard"
-require "entities.pause"
 
 Camera = require "hump.camera"
+Gamestate = require "hump.gamestate"
+
 
 local game = {}
+local pause = require "states.gamepause"
 
 function game:enter()
     camera = Camera(1024/2, 768/2)
@@ -49,17 +51,10 @@ function game:enter()
     game.cooldown = 0.2
     game.timer = 0
     game.scoreboard = Scoreboard(11*32,23*32)
-    game.paused = Pause(false, camera.x/2, camera.y/2)
-
 end
 
 
 function game:draw()
-    if game.paused.isPaused then
-        self.paused:draw()
-        return
-    end
-
     camera:attach()
     
     board:draw()
@@ -90,7 +85,9 @@ function game:update(dt)
     end
 
     if self.input:pressed 'pause' then
-        game.paused.isPaused = not game.paused.isPaused
+        if Gamestate.current() ~= pause then
+            Gamestate.push(pause)
+        end
     end
     
      if self.input:pressed 'rotateLeft' and self.cooldown < 0 then
