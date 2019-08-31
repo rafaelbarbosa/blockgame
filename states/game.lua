@@ -20,10 +20,10 @@ local game = {}
 local pause = require "states.gamepause"
 
 function game:enter()
-    camera = Camera(1024/2, 768/2)
-    camera.scale = love.graphics.getHeight()/768
+    self.camera = Camera(1024/2, 768/2)
+    self.camera.scale = love.graphics.getHeight()/768
     self.score=0
-    game.input = baton.new {
+    self.input = baton.new {
             controls = {
                 rotateLeft = {'key:z'},
                 rotateRight = {'key:x'},
@@ -42,45 +42,43 @@ function game:enter()
             joystick = love.joystick.getJoysticks()[1],
         }
 
-    board = Board(10,24)
-    pieceDrawer = PieceDrawer()
+    self.board = Board(10,24)
+    self.pieceDrawer = PieceDrawer()
     
-    piece = pieceDrawer:getNextPiece()
-    ghostPiece = piece:clone()
-    ghostPiece.ghost=true
-    game.cooldown = 0.2
-    game.timer = 0
-    game.scoreboard = Scoreboard(11*32,23*32)
+    self.piece = self.pieceDrawer:getNextPiece()
+    self.ghostPiece = self.piece:clone()
+    self.ghostPiece.ghost=true
+    self.cooldown = 0.2
+    self.timer = 0
+    self.scoreboard = Scoreboard(11*32,23*32)
 end
 
 
 function game:draw()
-    camera:attach()
+    self.camera:attach()
     
-    board:draw()
-    piece:draw()
-    pieceDrawer:draw()
-    ghostPiece:draw()
+    self.board:draw()
+    self.piece:draw()
+    self.pieceDrawer:draw()
+    self.ghostPiece:draw()
     self.scoreboard:draw()
-    camera:detach()
+    self.camera:detach()
 
 end
 
 function game:update(dt)
 
- 
-
     self.input:update()
         
     local x, y = self.input:get 'move'
-    if x < 0 and self.cooldown < 0 and board:canPieceMoveLeft(piece) then
-        piece:moveLeft()
-        ghostPiece:moveLeft()
+    if x < 0 and self.cooldown < 0 and self.board:canPieceMoveLeft(self.piece) then
+        self.piece:moveLeft()
+        self.ghostPiece:moveLeft()
         self.cooldown = 0.2
     end
-    if x > 0 and self.cooldown < 0 and board:canPieceMoveRight(piece) then
-        piece:moveRight()
-        ghostPiece:moveRight()
+    if x > 0 and self.cooldown < 0 and self.board:canPieceMoveRight(self.piece) then
+        self.piece:moveRight()
+        self.ghostPiece:moveRight()
         self.cooldown = 0.2
     end
 
@@ -91,19 +89,19 @@ function game:update(dt)
     end
     
      if self.input:pressed 'rotateLeft' and self.cooldown < 0 then
-        piece:rotateLeft()
-        ghostPiece:rotateLeft()
+        self.piece:rotateLeft()
+        self.ghostPiece:rotateLeft()
         self.cooldown = 0.2
     end
     if self.input:pressed 'rotateRight' and self.cooldown < 0 then
-        piece:rotateRight()
-        ghostPiece:rotateRight()
+        self.piece:rotateRight()
+        self.ghostPiece:rotateRight()
         self.cooldown = 0.2
     end
 
     self:updateGhostPieceHeight()
-    if y > 0 and self.cooldown < 0 and board:canPieceMoveDown(piece) then
-        piece.y = ghostPiece.y
+    if y > 0 and self.cooldown < 0 and self.board:canPieceMoveDown(self.piece) then
+        self.piece.y = self.ghostPiece.y
         self.cooldown = 0.2
         self.timer = 0
     end
@@ -113,27 +111,27 @@ function game:update(dt)
 
     self.cooldown = self.cooldown - dt
     self.timer = self.timer + dt
-    if self.timer > 1 and board:canPieceMoveDown(piece) then
-        piece:moveDown()
+    if self.timer > 1 and self.board:canPieceMoveDown(self.piece) then
+        self.piece:moveDown()
         self.timer = 0
     end
 
    
-    if board:canPieceMoveDown(piece) == false then
-        board:addPieceToBoard(piece)
-        self.score = self.score + board:removeCompleteRows() * 10000
+    if self.board:canPieceMoveDown(self.piece) == false then
+        self.board:addPieceToBoard(self.piece)
+        self.score = self.score + self.board:removeCompleteRows() * 10000
         self.scoreboard:updateScore(self.score)
-        piece = pieceDrawer:getNextPiece()
-        ghostPiece = piece:clone()
-        ghostPiece.ghost=true
+        self.piece = self.pieceDrawer:getNextPiece()
+        self.ghostPiece = self.piece:clone()
+        self.ghostPiece.ghost=true
     end
-    board:update(dt)
+    self.board:update(dt)
     
 end
 function game:updateGhostPieceHeight()
-    local gX, gY = 	ghostPiece:getLocationInBoard()
-    local gMatrix = ghostPiece:getMatrix()
-    local gPieceWidth,_ = ghostPiece:getSize()
+    local gX, gY = 	self.ghostPiece:getLocationInBoard()
+    local gMatrix = self.ghostPiece:getMatrix()
+    local gPieceWidth,_ = self.ghostPiece:getSize()
 
     local gColumnHeight = {}
 
@@ -151,7 +149,7 @@ function game:updateGhostPieceHeight()
     local minHeightOfPiece = 24
     for i = 1, gPieceWidth do
         if((gX+i)-1>0 and (gX+i)-1<11) then
-            local heightOfColumn = board:getHeightOfColumn((gX+i)-1);
+            local heightOfColumn = self.board:getHeightOfColumn((gX+i)-1);
             local cHeightOfPiece = heightOfColumn - (gColumnHeight[i])
             if cHeightOfPiece < minHeightOfPiece then
                 minHeightOfPiece = cHeightOfPiece
@@ -159,7 +157,7 @@ function game:updateGhostPieceHeight()
         end
     end 
 
-    ghostPiece.y = (minHeightOfPiece)*32
+    self.ghostPiece.y = (minHeightOfPiece)*32
 end
 
 
