@@ -30,11 +30,11 @@ function Piece:draw()
 		love.graphics.setColor( 1, 1, 1, 1 )
 	end
 	for i=1,self.height do
-      for j=1,self.width do
-      	if(self.matrix[i][j]> 0) then
-        	love.graphics.draw(self.spritesheet, self.quad,((j*32)-32)+self.x,((i*32)-32)+self.y)
-        end
-      end
+    	for j=1,self.width do
+      		if(self.matrix[i][j]> 0) then
+        		love.graphics.draw(self.spritesheet, self.quad,((j*32)-32)+self.x,((i*32)-32)+self.y)
+        	end
+      	end
 	end
 end
 
@@ -96,11 +96,11 @@ end
 function transpose(m)
    local rotated = {}
    for c, m_1_c in ipairs(m[1]) do
-      local col = {m_1_c}
-      for r = 2, #m do
-         col[r] = m[r][c]
-      end
-      table.insert(rotated, col)
+      	local col = {m_1_c}
+		for r = 2, #m do
+			col[r] = m[r][c]
+		end
+		table.insert(rotated, col)
    end
    return rotated
 end
@@ -108,11 +108,11 @@ end
 function rotate_CCW_90(m)
    local rotated = {}
    for c, m_1_c in ipairs(m[1]) do
-      local col = {m_1_c}
-      for r = 2, #m do
-         col[r] = m[r][c]
-      end
-      table.insert(rotated, 1, col)
+		local col = {m_1_c}
+		for r = 2, #m do
+			col[r] = m[r][c]
+		end
+		table.insert(rotated, 1, col)
    end
    return rotated
 end

@@ -4,9 +4,6 @@ PieceGenerator = Class{
     end
 }
 
-
-
-
 function PieceGenerator:generate()
 	local pieceIndex = math.random(7)
 	local color = math.random(1,6)
@@ -41,7 +38,6 @@ function PieceGenerator:generate()
 	if pieceIndex == 3 then
 		return Piece(
     	{
-        	
         	{0,0,1},
         	{1,1,1},
         	{0,0,0},
@@ -54,7 +50,6 @@ function PieceGenerator:generate()
 	if pieceIndex == 4 then
 		return Piece(
     	{
-    		
         	{1,0,0},
         	{1,1,1},
         	{0,0,0},

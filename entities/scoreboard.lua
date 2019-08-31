@@ -5,7 +5,6 @@ Scoreboard = Class{
         self.score = 0
         self.font = love.graphics.newFont("assets/NovaFlat-Regular.ttf",32)
         self.text = love.graphics.newText(self.font,string.format("%09d",0))
-        
     end
 }
 
