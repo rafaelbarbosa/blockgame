@@ -3,6 +3,7 @@ require "entities.pause"
 require "entities.menu"
 
 
+
 function GamePause:init()
     -- create an instance of baton to handle player input
     -- this will be useful for a more feature complete pause screen that has options like exit game or return to game
@@ -82,7 +83,7 @@ function GamePause:update(dt)
             return Gamestate.switch(self.from) 
         end
         if key == "exit" then
-            love.event.quit()
+            return Gamestate.switch(mainMenu) 
         end
         self.cooldown = 0
     end

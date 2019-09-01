@@ -10,9 +10,11 @@
 
 require "entities.menu"
 
-local gameover = {}
+local MainMenu = {}
+local game = require "states.game"
 
-function gameover:init()
+
+function MainMenu:init()
 
     self.input = baton.new {
         controls = {
@@ -30,21 +32,17 @@ function gameover:init()
 
     self.menu = Menu(100,200,
     {
-        {key = "restart", text="Restart"},
+        {key = "newGame", text="New game"},
         {key = "exit", text="Exit"}
     })
     
 end
 
-function gameover:enter(from)
-    self.from = from
+function MainMenu:enter()
     self.cooldown = 0
 end
 
-function gameover:draw()
-    -- draw previous screen
-    self.from:draw()
-
+function MainMenu:draw()
     -- get the screen width and height to position the overlay in the correct place
     local W, H = love.graphics.getWidth(), love.graphics.getHeight()
 
@@ -56,7 +54,7 @@ function gameover:draw()
     self.menu:draw()
 
 end
-function gameover:update(dt)
+function MainMenu:update(dt)
     self.input:update()
     
 
@@ -73,11 +71,11 @@ function gameover:update(dt)
     if self.input:pressed 'action' then
         local key, text = self.menu:getSelectedElement()
     
-        if key == "restart" then 
-            return Gamestate.switch(self.from) 
+        if key == "newGame" then 
+            return Gamestate.switch(game)
         end
         if key == "exit" then
-            return Gamestate.switch(mainMenu) 
+            love.event.quit()
         end
         self.cooldown = 0
     end
@@ -87,4 +85,4 @@ function gameover:update(dt)
 end
 
 
-return gameover
+return MainMenu

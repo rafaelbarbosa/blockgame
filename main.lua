@@ -16,7 +16,7 @@ vector = require "hump.vector-light"
 Camera = require "hump.camera"
 Timer = require "hump.timer"
 
-local game = require "states.game"
+mainMenu = require "states.mainmenu"
 
 
 
@@ -24,5 +24,5 @@ function love.load()
     love.graphics.setDefaultFilter("nearest","nearest")
     love.window.setTitle("Brickmania")
     Gamestate.registerEvents()
-    Gamestate.switch(game,"game")
+    Gamestate.switch(mainMenu,"mainMenu")
 end
