@@ -93,6 +93,14 @@ function Piece:getMatrix()
 	return self.matrix
 end
 
+function Piece:getCWRotatedMatrix()
+	return rotate_CW_90(self.matrix)
+end
+function Piece:getCCWRotatedMatrix()
+	return rotate_CCW_90(self.matrix)
+end
+
+
 function transpose(m)
    local rotated = {}
    for c, m_1_c in ipairs(m[1]) do

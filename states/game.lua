@@ -87,16 +87,21 @@ function game:update(dt)
             Gamestate.push(pause)
         end
     end
-    
+    local pX,pY = self.piece:getLocationInBoard()
      if self.input:pressed 'rotateLeft' and self.cooldown < 0 then
-        self.piece:rotateLeft()
-        self.ghostPiece:rotateLeft()
-        self.cooldown = 0.2
+      
+        if(self.board:isInsideBoard(pX,pY,self.piece:getCCWRotatedMatrix())) then
+            self.piece:rotateLeft()
+            self.ghostPiece:rotateLeft()
+            self.cooldown = 0.2
+        end
     end
     if self.input:pressed 'rotateRight' and self.cooldown < 0 then
-        self.piece:rotateRight()
-        self.ghostPiece:rotateRight()
-        self.cooldown = 0.2
+        if(self.board:isInsideBoard(pX,pY,self.piece:getCWRotatedMatrix())) then
+            self.piece:rotateRight()
+            self.ghostPiece:rotateRight()
+            self.cooldown = 0.2
+        end
     end
 
     self:updateGhostPieceHeight()

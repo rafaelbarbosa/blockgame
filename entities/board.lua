@@ -191,3 +191,17 @@ function Board:getHeightOfColumn(column)
 	return maxHeight
 end
 
+function Board:isInsideBoard(pX,pY,pMatrix)
+	-- check if the piece is at the bottom of the board
+	for i=1,#pMatrix do
+	    for j=1,#pMatrix[i] do
+			if(   pMatrix[i][j] == 1 and j+pX-1 > self.width
+			   or pMatrix[i][j] == 1 and j+pX-1 < 1
+			   or pMatrix[i][j] == 1 and i+pY-1 > self.height) then
+	    		return false
+	    	end
+	    end
+	end
+	return true
+end
+
