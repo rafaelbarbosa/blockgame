@@ -16,11 +16,11 @@ Menu = Class{
 function Menu:draw()
     for i = 1, #self.texts do
         if(self.selectedElement == i) then
-            love.graphics.setColor(1,0,0)
+            love.graphics.setColor(241/256,196/256,15/256)
         else
             love.graphics.setColor(1,1,1)
         end
-        love.graphics.draw(self.texts[i], self.x , self.y + 32*i)
+        love.graphics.draw(self.texts[i], self.x , self.y + (42*i))
     end
 end
 

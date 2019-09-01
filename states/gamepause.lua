@@ -1,5 +1,7 @@
 GamePause = {}
 require "entities.pause"
+require "entities.menu"
+
 
 function GamePause:init()
     -- create an instance of baton to handle player input
@@ -10,15 +12,22 @@ function GamePause:init()
             right = {'key:right', 'key:d', 'axis:leftx+', 'button:dpright'},
             up = {'key:up', 'key:w', 'axis:lefty-', 'button:dpup'},
             down = {'key:down', 'key:s', 'axis:lefty+', 'button:dpdown'},
-            action = {'key:space', 'button:enter'},
-            exit = {'key:escape'},
-            pause = {'key:p'}
+            action = {'key:space', 'key:return'},
+            pause = {'key:p','key:escape'}
         },
         pairs = {
             move = {'left', 'right', 'up', 'down'}
         },
         joystick = love.joystick.getJoysticks()[1],
     }
+    
+    -- instantiate the pause menu
+    self.menu = Menu(100,200,
+    {
+        {key = "resume", text="Resume"},
+        {key = "restart", text="Restart"},
+        {key = "exit", text="Exit"}
+    })
     --instantiate the pause text and set it in the middle of the screen
     local W, H = love.graphics.getWidth(), love.graphics.getHeight()
     self.pause = Pause(W/2, H/2)
@@ -46,22 +55,46 @@ function GamePause:draw()
 
     -- draw the pause text
     self.pause:draw()
+    self.menu:draw()
 end
 
 function GamePause:update(dt)
     -- update baton input
     self.input:update()
 
-    -- check if we've entered the state more than 200ms ago and unlock user input
-    if self.cooldown > 0.2 then
-        --check if the user has pressed either exit or pause and return to the game
-        if self.input:pressed "exit" or self.input:pressed 'pause' then
+    local x, y = self.input:get 'move'
+    if(y > 0 and self.cooldown > 0.2 ) then
+        self.menu:nextElement()
+        self.cooldown = 0
+    end
+    if(y < 0 and self.cooldown > 0.2 ) then
+        self.menu:previousElement()
+        self.cooldown = 0
+    end
+
+    if self.input:pressed 'action' then
+        local key, text = self.menu:getSelectedElement()
+    
+        if key == "resume" then 
             return Gamestate.pop() 
         end
-    else
-        -- we haven't been in the state for more than 200ms, increment the cooldown with the delta time
-        self.cooldown = self.cooldown + dt
+        if key == "restart" then 
+            return Gamestate.switch(self.from) 
+        end
+        if key == "exit" then
+            love.event.quit()
+        end
+        self.cooldown = 0
     end
+    
+    --check if the user has pressed either exit or pause and return to the game
+    if self.input:pressed 'pause' and self.cooldown > 0.2 then
+        return Gamestate.pop() 
+    end
+    
+    -- we haven't been in the state for more than 200ms, increment the cooldown with the delta time
+    self.cooldown = self.cooldown + dt
+    
 end
 
 return GamePause

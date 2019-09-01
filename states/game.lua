@@ -33,9 +33,8 @@ function game:enter()
                 up = {'key:up', 'key:w', 'axis:lefty-', 'button:dpup'},
                 down = {'key:down', 'key:s', 'axis:lefty+', 'button:dpdown'},
                 action = {'key:space', 'button:a'},
-                exit = {'key:escape'},
                 debug = {'key:t'},
-                pause = {'key:p'}
+                pause = {'key:p','key:escape'}
             },
             pairs = {
                 move = {'left', 'right', 'up', 'down'}
