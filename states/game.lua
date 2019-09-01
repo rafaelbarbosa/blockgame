@@ -18,6 +18,7 @@ Gamestate = require "hump.gamestate"
 
 local game = {}
 local pause = require "states.gamepause"
+local gameover = require "states.gameover"
 
 function game:enter()
     self.camera = Camera(1024/2, 768/2)
@@ -124,6 +125,13 @@ function game:update(dt)
         self.piece = self.pieceDrawer:getNextPiece()
         self.ghostPiece = self.piece:clone()
         self.ghostPiece.ghost=true
+
+        -- check if we can place the new piece on the starting place
+        -- otherwise we lost so lets change to another state
+        if self.board:canPieceBePlaced(self.piece) == false then
+            Gamestate.switch(gameover)
+        end
+
     end
     self.board:update(dt)
     

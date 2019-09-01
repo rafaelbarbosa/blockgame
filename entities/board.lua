@@ -108,6 +108,27 @@ function Board:canPieceMoveRight(piece)
 
 end
 
+function Board:canPieceBePlaced(piece)
+	local pX,pY = piece:getLocationInBoard()
+	local pMatrix = piece:getMatrix()
+	local pWidth,pHeight = piece:getSize()
+
+	for i=1,pHeight do
+	    for j=1,pWidth do
+	    	if(pMatrix[i][j] == 1 and j+pX-1 < 1) then
+	    		return false
+	    	end
+	    	if( pMatrix[i][j] == 1 and pMatrix[i][j] + self.matrix[i+pY-1][j+pX-1] > 1) then
+	    		return false
+	    	end 
+	    end
+	end
+	
+	
+	return true
+
+end
+
 function Board:addPieceToBoard(piece)
 	local pX,pY = piece:getLocationInBoard()
 	local pMatrix = piece:getMatrix()
