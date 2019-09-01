@@ -24,6 +24,9 @@ Board = Class{
 
 function Board:draw()
 	
+	love.graphics.setColor( 0.9, 0.9, 0.9, 1 )
+	love.graphics.rectangle("fill",0,0,self.width*32, self.height*32)
+	
 	for i=1,self.height do
 		if(self.debug) then
 			love.graphics.setColor( 0, 1, 0, 1 )
